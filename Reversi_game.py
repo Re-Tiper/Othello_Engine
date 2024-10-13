@@ -71,5 +71,3 @@ while empty_cells>0 & (not no_move):
     no_move_current = not bool(empty_cells_before - empty_cells)
     no_move = no_move_before & no_move_current
     no_move_before = no_move_current
-
-    
