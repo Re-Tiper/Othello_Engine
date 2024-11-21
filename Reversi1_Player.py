@@ -13,7 +13,7 @@ class Cell:
             if int in [-1, 0, 1, 2]:
                 self.owner = int
             else:
-                raise ValueError("Οι τιμές πρέπει να είναι -1, 0, 1, 2")
+                raise ValueError("The values must be -1, 0, 1, 2")
         except ValueError as ve:
             print(ve)
 
@@ -31,7 +31,7 @@ class Reversi30:
             if int in [0, 1]:
                 self.pid = int
             else:
-                raise ValueError("Οι παίχτες είναι δύο, 0 για μαύρα και 1 για άσπρα")
+                raise ValueError("There are two players, 0 for black and 1 for white")
         except ValueError as ve:
             print(ve)
 
@@ -40,39 +40,39 @@ class Reversi30:
             if int % 2 == 0:
                 self.size = int
             else:
-                raise ValueError("Το ταμπλό πρέπει να είναι άρτιος αριθμός")
+                raise ValueError("The board size must be an even number")
         except ValueError as ve:
             print(ve)
+'''
+     def setBoard(self, size=8):     # Creates the initial board
+         board = []
+         for i in range(size):
+             row = [Cell() for j in range(size)]      # Creates the board as a list of Cells
+             board.append(row)
+         # Sets initial positions on the board
+         board[3][3].setOwner(1)
+         board[4][4].setOwner(1)
+         board[3][4].setOwner(0)
+         board[4][3].setOwner(0)
+         return board
 
-#    def setBoard(self, size=8):     # Δημιουργεί το αρχικό ταμπλό
-#        board = []
-#        for i in range(size):
-#            row = [Cell() for j in range(size)]      # Έχω κάνει το ταμπλό λιστα απο Cells
-#            board.append(row)
-#        # Βάζω αρχικές θέσεις στο ταμπλό
-#        board[3][3].setOwner(1)
-#        board[4][4].setOwner(1)
-#        board[3][4].setOwner(0)
-#        board[4][3].setOwner(0)
-#        return board
-
-#    def printBoard(self, board):    # Μετατρέπει το ταμπλό σε λίστα με int με την συνάρτηση getOwner
-#        print("   0 1 2 3 4 5 6 7")
-#        print("  -----------------")
-#        for i in range(self.size):
-#            print("{:d} |".format(i), end="")     # end="" ώστε να παραμείνει στην ίδια γραμμή
-#            for j in range(self.size):
-#                owner = board[i][j].getOwner()
-#                if owner == -1:
-#                    print("-", end=" ")
-#                else:
-#                    print(owner, end=" ")
-#            print("|")
-#        print("  -----------------")
-
+     def printBoard(self, board):    # Converts the board to a list of ints using the getOwner function
+         print("   0 1 2 3 4 5 6 7")
+         print("  -----------------")
+         for i in range(self.size):
+             print("{:d} |".format(i), end="")     # end="" keeps it on the same line
+             for j in range(self.size):
+                 owner = board[i][j].getOwner()
+                 if owner == -1:
+                     print("-", end=" ")
+                 else:
+                     print(owner, end=" ")
+             print("|")
+         print("  -----------------")
+'''
     def findNeighbours(self, board):
         find_cells = []
-        for i in range(self.size):      # Διαδικασία που βρίσκει τα μάυρα ή άσπρα Cells του board ανάλογα με την τιμή pid
+        for i in range(self.size):      # Finds the black or white Cells on the board based on the pid value
             for j in range(self.size):
                 if board[i][j].getOwner() == self.pid:
                     find_cells.append((i,j))
@@ -82,10 +82,10 @@ class Reversi30:
             for i, j in find_cells:
                 i += x
                 j += y
-                while i >= 0 and i < self.size and j >= 0 and j < self.size and board[i][j].getOwner() == 1 - self.pid: # Ψάχνει μαύρα αν pid=1 (άσπρο)
-                    i += x                                                                                              # Ψάχνει άσπρα αν pid=0 (μαύρο)
+                while i >= 0 and i < self.size and j >= 0 and j < self.size and board[i][j].getOwner() == 1 - self.pid: # Looks for black if pid=1 (white)
+                    i += x                                                                                              # Looks for white if pid=0 (black)
                     j += y
-                    if i < 0 or i >= self.size or j < 0 or j >= self.size:  # Θέλουμε οι τιμές να παραμένουν μέσα στο ταμπλό που ορίζει η instance var size
+                    if i < 0 or i >= self.size or j < 0 or j >= self.size:  # Keeps the values within the board size defined by the instance var size
                         break;
                     if board[i][j].getOwner() == -1:
                         board[i][j].setOwner(2)
@@ -98,25 +98,25 @@ class Reversi30:
         moves = []
         best_move = None
 
-        for i in range(self.size):      # Διαδικασία που βρίσκει τις πιθανές κινήσεις του board δηλαδή pid=2
+        for i in range(self.size):      # Finds possible moves on the board, i.e., pid=2
             for j in range(self.size):
                 if board[i][j].getOwner() == 2:
                     moves.append((i,j))
 
-        if len(moves) == 0:        # Αν δεν υπάρχουν κινήσεις τότε επιστρέφει την κενή πλειάδα
+        if len(moves) == 0:        # If there are no moves, return the empty tuple
             return best_move
 
-        for move in moves:         # Αν μια από τις γωνίες είναι δυνατή κίνηση τότε απευθείας επιλέγεται
+        for move in moves:         # If any corner is a possible move, it is chosen immediately
             if move in [(0,0), (0,7), (7,0), (7,7)]:
                 return move
 
         best_score = -1
         dir = [(0, -1), (0, 1), (1, 0), (-1, 0), (1, -1), (1, 1), (-1, -1), (-1, 1)]
         for move in moves:
-            score = 0           # Ο αριθμός των cell του αντιπάλου που βρίσκονται ανάμεσα στα cell του παίχτη (προς όλες τις κατευθύνσεις)
+            score = 0           # The number of opponent's cells between the player's cells in all directions
             for x, y in dir:
                 i, j = move
-                score_add = 0       # Ορίζω score_add που μετρά το score της κάθε κατεύθυνσης
+                score_add = 0       # Defines score_add to count the score of each direction
                 i += x
                 j += y
                 while i >= 0 and i < self.size and j >= 0 and j < self.size and board[i][j].getOwner() == 1 - self.pid:
@@ -128,9 +128,9 @@ class Reversi30:
                     if board[i][j].getOwner() == -1 or board[i][j].getOwner() == 2:
                         break;
                     elif board[i][j].getOwner() == self.pid:
-                        score += score_add                      # Προσθέτω την τιμή της score_add στην score μόνο όταν μια διαδρομή καταλήγει σε cell του παίχτη
-            if score > best_score:      # Με αυτον τον τρόπο αν υπάρχουν παραπάνω απο μία κινήσεις που εξασφαλίζουν μέγιστο score
-                best_score = score      # θα διαλέξει την πρώτη που βρήκε
+                        score += score_add                      # Add score_add to score only when a direction ends in a player's cell
+            if score > best_score:      # If multiple moves provide the same maximum score
+                best_score = score       # It selects the first one it finds
                 best_move = move
         return best_move #, best_score, moves
 
@@ -142,7 +142,7 @@ class Reversi30:
             i, j = row, col
             i += x
             j += y
-            cells_to_take_over = []     # Λίστα που κρατά τις συντ/νες των cells του αντιπάλου για take over προς κάθε κατεύθυνση
+            cells_to_take_over = []     # List to store opponent's cells for takeover in each direction
             while i >= 0 and i < self.size and j >= 0 and j < self.size and board[i][j].getOwner() == 1 - self.pid:
                 cells_to_take_over.append((i, j))
                 i += x
@@ -151,17 +151,17 @@ class Reversi30:
                     break;
                 if board[i][j].getOwner() == -1: # or board[i][j].getOwner() == 2:
                     break;
-                elif board[i][j].getOwner() == self.pid:        # Αν ο αλγόριθμος καταλήξει σε cell του παίχτη τότε μόνο προστίθεται
-                    take_over_cells += cells_to_take_over       # η cells_to_take_over στην take_over_cells, αλλιώς συνεχίζει στον
-                    break;                                      # έλεγχο των υπολοίπων κατευθύνσεων
-        return list(set(take_over_cells))   # Το γράφω έτσι ώστε να εξαφανίζονται τα duplicates (εμφανίστηκαν σε κάποια παραδείγματα)
+                elif board[i][j].getOwner() == self.pid:        # If the algorithm ends in a player's cell, only then is it added
+                    take_over_cells += cells_to_take_over       # cells_to_take_over is added to take_over_cells, otherwise continues checking other directions
+                    break;                                      
+        return list(set(take_over_cells))   # Written this way to remove duplicates (they appeared in some cases)
 
     def applyChanges(self, board):
-        board = self.findNeighbours(board)              # Παίρνουμε το board απο την findNeighbours ώστε να χρησιμοποιήσουμε
-        best_move = self.placeTile(board)               # την placeTile (χρειάζεται τις δυνατές κινήσεις ώστε να τις αξιολογήσει).
+        board = self.findNeighbours(board)              # Get the board from findNeighbours to use
+        best_move = self.placeTile(board)               # placeTile needs the possible moves to evaluate them
 
-        if best_move is None:                           # Αν δεν υπάρχει κίνηση τότε απλα θα μετατρέπει     (Αχρείαστο αφού αν best_move=None τότε δεν υπάρχουν cells με owner 2)
-#           for i in range(self.size):                  # τα cells του board που έχουν τιμή 2 σε τιμή -1.
+        if best_move is None:                           
+#           for i in range(self.size):                  # Converts cells with owner 2 to -1
 #               for j in range(self.size):
 #                   if board[i][j].getOwner() == 2:
 #                       board[i][j].setOwner(-1)
@@ -169,19 +169,19 @@ class Reversi30:
         else:
             i, j = best_move
             take_over_cells = self.findTakeOverCells(board, row=i, col=j)
-            board[i][j].setOwner(self.pid)              # Βάζει το cell του παίχτη στην βέλτιστη θέση
+            board[i][j].setOwner(self.pid)              # Places the player's cell in the best position
 
-            for cell in take_over_cells:                # Παίρνει τα cells του αντιπάλου
+            for cell in take_over_cells:                # Takes the opponent's cells
                 i, j = cell
                 board[i][j].setOwner(self.pid)
 
-            for i in range(self.size):                  # Μετατρέπει τα cells του board που έχουν τιμή 2 σε τιμή -1
+            for i in range(self.size):                  # Converts cells with owner 2 to -1
                 for j in range(self.size):
                     if board[i][j].getOwner() == 2:
                         board[i][j].setOwner(-1)
             return board
 
-# # create an instance of the Reversi30 class with size 8
+# # create an instance of the Reversi1 class with size 8
 # game = Reversi30(0,8)
 # # get the starting board
 # board = game.setBoard()
