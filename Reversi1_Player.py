@@ -24,7 +24,7 @@ class Reversi30:
 
     @staticmethod
     def getPlayerName():
-        return "Dimitriadis_Doulaveris"
+        return "Player1"
 
     def setPid(self, int):
         try:
