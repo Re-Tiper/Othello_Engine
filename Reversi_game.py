@@ -1,6 +1,6 @@
 # --- Replace X with the number of your team ---
-import Reversi as RP  # ReversiX_Player
-import Reversi26_Player as RP26
+import Reversi1_Player as RP1  
+import Reversi2_Player as RP2
 import matplotlib.pyplot as plt
 from matplotlib import colors
 import numpy as np
