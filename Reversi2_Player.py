@@ -58,7 +58,7 @@ class Reversi26:
 
     # Επιστρέφει σε string τα ονόματα των φοιτητών
     def getPlayerName(self):
-        return "Prevezas_Christos, Tziortzis_Alexandros, Tsaousi_Rebekka"
+        return "Player2"
 
     
     # Εύρεση πιθανών θέσεων τοποθέτησης πιονιού και αλλαγή του owner attribute σε 2 στο board
